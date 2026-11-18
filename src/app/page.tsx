@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const featuredHomes = [
   { title: "Bedsitter", area: "Kenol, Murang'a", rent: 4500 },
   { title: "One bedroom", area: "Kiganjo, Nyeri", rent: 9000 },
@@ -19,6 +21,9 @@ export default function Home() {
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-10">
         <h2 className="text-2xl font-bold text-zinc-900">Featured homes</h2>
+        <Link className="mt-2 inline-block font-bold text-violet-700 underline" href="/listings">
+          See all homes
+        </Link>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featuredHomes.map((home) => (
             <article key={home.title} className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-zinc-200">
