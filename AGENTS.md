@@ -22,6 +22,7 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya.
 - Never create, print, request or commit passwords, tokens, keys or connection strings.
 - Keep environment files out of Git.
 - Do not claim a message was sent or saved unless server code proves it.
+- Chapter 6 inquiry code validates fictional input on the server and saves nothing.
 
 ## Words
 
