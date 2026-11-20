@@ -2,7 +2,7 @@ import { and, asc, eq } from "drizzle-orm";
 
 import type { Listing } from "@/data/listings";
 import { getDatabase } from "@/db/client";
-import { inquiries, listings } from "@/db/schema";
+import { agencies, inquiries, listings } from "@/db/schema";
 
 export async function readListings(): Promise<Listing[]> {
   const rows = await getDatabase()
@@ -40,4 +40,48 @@ export async function saveInquiry(input: NewInquiry) {
 
   await database.insert(inquiries).values(input);
   return listing;
+}
+
+export async function readAgencyDashboard(agencyId: string) {
+  const database = getDatabase();
+  const [agency] = await database
+    .select({ id: agencies.id, name: agencies.name, county: agencies.county })
+    .from(agencies)
+    .where(eq(agencies.id, agencyId))
+    .limit(1);
+
+  if (!agency) {
+    return null;
+  }
+
+  const agencyListings = await database
+    .select({
+      id: listings.id,
+      title: listings.title,
+      area: listings.area,
+      county: listings.county,
+      rentKes: listings.rentKes,
+      status: listings.status,
+    })
+    .from(listings)
+    .where(eq(listings.agencyId, agencyId))
+    .orderBy(asc(listings.title));
+
+  return { agency, listings: agencyListings };
+}
+
+type ListingStatus = "available" | "let";
+
+export async function updateAgencyListingStatus(input: {
+  agencyId: string;
+  listingId: string;
+  status: ListingStatus;
+}) {
+  const [updated] = await getDatabase()
+    .update(listings)
+    .set({ status: input.status })
+    .where(and(eq(listings.id, input.listingId), eq(listings.agencyId, input.agencyId)))
+    .returning({ id: listings.id, status: listings.status });
+
+  return updated ?? null;
 }

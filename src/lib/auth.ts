@@ -18,6 +18,21 @@ export const auth = betterAuth({
     provider: "pg",
     schema: authSchema,
   }),
+  user: {
+    additionalFields: {
+      agencyId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "agent",
+        input: false,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     disableSignUp: process.env.ALLOW_DEMO_SIGNUP !== "true",

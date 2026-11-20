@@ -4,7 +4,7 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya. Stude
 
 Every agency, home, area combination, rent and inquiry in this repository is invented. Fictional data only.
 
-Chapter 8 uses Drizzle ORM to read listings from PostgreSQL and save validated fictional inquiries. Chapter 9 adds Better Auth email/password authentication for one fictional agency agent. Public sign-up is disabled. The protected `/agent` page proves identity only; roles and agency isolation arrive in Chapter 10.
+Chapter 8 uses Drizzle ORM to read listings from PostgreSQL and save validated fictional inquiries. Chapter 9 adds Better Auth. Chapter 10 adds role-based authorization and agency isolation: Amani Manager can update only Nyumba Agency listings, while Baraka Agent sees only Ziwa Property listings and has read-only access. Public sign-up stays disabled.
 
 ## Run the app
 
@@ -19,7 +19,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Copy `.env.example` to `.env.local`. Ask the teacher for a scoped URL to your isolated learner database and the generated auth secret, then use only the fictional class credentials. Never paste their values into a prompt, screenshot, commit or class chat.
 
-The teacher prepares each isolated learner database and its fictional agent:
+The teacher prepares each isolated learner database and its two fictional users:
 
 ```bash
 bun --env-file=.env.local run db:migrate
@@ -28,6 +28,8 @@ bun --env-file=.env.local run auth:seed
 ```
 
 Learners do not run migrations against one shared writable schema.
+
+Open `/dashboard` after signing in. Test four server-side boundaries: signed-out access redirects; Amani can update a Nyumba Agency listing; Amani cannot update a Ziwa listing; and Baraka cannot update even a Ziwa listing because the agent role is read-only.
 
 Before pushing a change, run:
 
