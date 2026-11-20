@@ -9,6 +9,7 @@
 
 - Facts: name and email address.
 - Belongs to one agency.
+- Planned for Chapter 9, where Better Auth stores the agent as an authenticated user. Chapter 8 does not create a second, competing agent table.
 
 ## Listing
 
@@ -17,7 +18,7 @@
 
 ## Inquiry
 
-- Facts: name, message and date.
+- Facts: name, message and creation date.
 - Belongs to one listing.
 
 All examples and test records are fictional. Secrets do not belong in plan files.
