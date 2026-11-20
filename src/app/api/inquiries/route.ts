@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { listings } from "@/data/listings";
+import { saveInquiry } from "@/db/queries";
 
 type InquiryInput = {
   listingId?: unknown;
@@ -9,21 +9,24 @@ type InquiryInput = {
 };
 
 export async function POST(request: Request) {
-  const input = (await request.json()) as InquiryInput;
-  const listing = listings.find(
-    (item) => item.id === input.listingId && item.status === "available",
-  );
+  let input: InquiryInput;
 
-  if (!listing) {
-    return NextResponse.json(
-      { message: "Choose an available sample home." },
-      { status: 400 },
-    );
+  try {
+    input = (await request.json()) as InquiryInput;
+  } catch {
+    return NextResponse.json({ message: "Send valid JSON." }, { status: 400 });
   }
 
   if (typeof input.displayName !== "string" || input.displayName.trim().length < 2) {
     return NextResponse.json(
       { message: "Use an invented name with at least 2 characters." },
+      { status: 400 },
+    );
+  }
+
+  if (input.displayName.trim().length > 80) {
+    return NextResponse.json(
+      { message: "Keep the invented name to 80 characters or fewer." },
       { status: 400 },
     );
   }
@@ -35,8 +38,35 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({
-    message: `The server checked your practice inquiry for ${listing.title}.`,
-    saved: false,
+  if (input.message.trim().length > 500) {
+    return NextResponse.json(
+      { message: "Keep the invented message to 500 characters or fewer." },
+      { status: 400 },
+    );
+  }
+
+  if (typeof input.listingId !== "string") {
+    return NextResponse.json(
+      { message: "Choose an available sample home." },
+      { status: 400 },
+    );
+  }
+
+  const saved = await saveInquiry({
+    listingId: input.listingId,
+    displayName: input.displayName.trim(),
+    message: input.message.trim(),
   });
+
+  if (!saved) {
+    return NextResponse.json(
+      { message: "Choose an available sample home." },
+      { status: 400 },
+    );
+  }
+
+  return NextResponse.json({
+    message: `Your fictional inquiry for ${saved.title} is stored for this class project.`,
+    saved: true,
+  }, { status: 201 });
 }

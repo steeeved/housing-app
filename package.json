@@ -6,10 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "bun run src/db/seed.ts",
+    "auth:seed": "bun run src/scripts/create-demo-agent.ts"
   },
   "dependencies": {
+    "better-auth": "1.7.25",
+    "drizzle-orm": "0.45.2",
     "next": "16.4.6",
+    "postgres": "3.4.7",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
@@ -20,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
+    "drizzle-kit": "0.31.7",
     "tailwindcss": "4.3.3",
     "typescript": "^5"
   },

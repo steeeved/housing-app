@@ -24,6 +24,10 @@ export default function Home() {
         <Link className="mt-2 inline-block font-bold text-violet-700 underline" href="/listings">
           See all homes
         </Link>
+        <span className="mx-3 text-zinc-400" aria-hidden="true">·</span>
+        <Link className="mt-2 inline-block font-bold text-violet-700 underline" href="/sign-in">
+          Agent sign-in
+        </Link>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {featuredHomes.map((home) => (
             <article key={home.title} className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-zinc-200">
