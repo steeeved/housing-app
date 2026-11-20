@@ -46,7 +46,7 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
       <section className="mt-10 rounded-xl bg-white p-6 ring-1 ring-zinc-200" aria-labelledby="inquiry-heading">
         <h2 id="inquiry-heading" className="text-2xl font-bold text-zinc-900">Practice inquiry received by the server</h2>
         <p className="mt-2 text-zinc-700">{responseMessage}</p>
-        <p className="mt-2 font-bold text-zinc-900">Nothing was saved or sent to an agency.</p>
+        <p className="mt-2 font-bold text-zinc-900">Saved in the class database. Nothing was sent to a real agency.</p>
         <button className={`${buttonClass} mt-5`} type="button" onClick={() => setStatus("idle")}>
           Send another practice inquiry
         </button>
@@ -56,9 +56,9 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
 
   return (
     <section className="mt-10 rounded-xl bg-white p-6 ring-1 ring-zinc-200" aria-labelledby="inquiry-heading">
-      <h2 id="inquiry-heading" className="text-2xl font-bold text-zinc-900">Send a practice inquiry to the server</h2>
+      <h2 id="inquiry-heading" className="text-2xl font-bold text-zinc-900">Save a fictional inquiry</h2>
       <p className="mt-2 text-zinc-700">
-        Use an invented name and message. The server checks the fields, then replies without saving anything.
+        Use an invented name and message. Do not include a real phone number, email address or home address.
       </p>
 
       <form className="mt-6 grid gap-4" onSubmit={submitInquiry}>
@@ -74,7 +74,7 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
 
         <div>
           <label className="font-bold text-zinc-800" htmlFor="display-name">Invented name</label>
-          <input className={fieldClass} id="display-name" name="displayName" placeholder="For example, Amani" required />
+          <input className={fieldClass} id="display-name" name="displayName" placeholder="For example, Amani" minLength={2} maxLength={80} required />
         </div>
 
         <div>
@@ -84,6 +84,8 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
             id="message"
             name="message"
             rows={4}
+            minLength={10}
+            maxLength={500}
             placeholder="I would like to know when this fictional home is available."
             required
           />

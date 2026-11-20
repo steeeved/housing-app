@@ -4,6 +4,8 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya. Stude
 
 Every agency, home, area combination, rent and inquiry in this repository is invented. Fictional data only.
 
+Chapter 8 uses Drizzle ORM to read listings from PostgreSQL and save validated fictional inquiries. It never contacts an agency.
+
 ## Run the app
 
 Install the pinned dependencies and start the development server:
@@ -14,6 +16,17 @@ bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+Copy `.env.example` to `.env.local` and ask the teacher for a scoped URL to your isolated learner database. Never paste the real value into a prompt, screenshot, commit or class chat.
+
+The teacher runs migrations and seeds once for each isolated learner database:
+
+```bash
+bun --env-file=.env.local run db:migrate
+bun --env-file=.env.local run db:seed
+```
+
+Learners do not run migrations against one shared writable schema.
 
 Before pushing a change, run:
 
@@ -30,7 +43,7 @@ bun run build
 4. Push the branch and open a pull request.
 5. Explain what changed before asking for review.
 
-The chapter PRs are cumulative. Each chapter starts from the previous chapter's approved state.
+The chapter PRs are cumulative, but every PR targets `main`. Merge them in chapter order; each later diff shrinks automatically after its prerequisite lands.
 
 ## Safety rules
 
