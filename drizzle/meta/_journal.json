@@ -8,6 +8,20 @@
       "when": 1795154676680,
       "tag": "0000_jazzy_puck",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795154790370,
+      "tag": "0001_quick_hellcat",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795154872442,
+      "tag": "0002_useful_nico_minoru",
+      "breakpoints": true
     }
   ]
 }
