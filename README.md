@@ -68,8 +68,26 @@ Chapter 11 adds one command that runs every automated check, and a GitHub workfl
 bun run check
 ```
 
-It runs, in order: `typecheck`, `lint`, `scan:secrets` and `build`. The workflow in `.github/workflows/check.yml` uses no secrets. Its build step uses obvious placeholder values that connect to nothing.
+It runs, in order: `typecheck`, `lint`, `scan:secrets`, `test` and `build`. The workflow in `.github/workflows/check.yml` uses no secrets. Its build step uses obvious placeholder values that connect to nothing.
 
 Green checks are necessary, not sufficient. They do not test sign-in, roles or agency isolation. Re-run the Chapter 10 access matrix whenever you touch those, and write the result in the pull request.
 
 `docs/environments.md` lists which setting belongs in which place. It holds names only.
+
+## Chapter 12: break it, fix it
+
+Chapter 12 is the learner trying to break their own app, then fixing what breaks. Three kinds of break matter most here: hostile text, bad requests, and pages that fail.
+
+`bun run check` now also runs `test`, which executes `src/scripts/test-validation.ts`: a table of inputs the inquiry validator must accept or reject. The workflow runs the same step.
+
+What changed:
+
+- `src/lib/validate-inquiry.ts` checks length, plain text, and real-looking contact details before anything is stored. It never repeats the rejected text back.
+- `src/app/api/inquiries/route.ts` answers bad JSON with 400 and a database failure with 503 and a plain sentence.
+- `src/app/not-found.tsx` and `src/app/error.tsx` give friendly pages with no technical detail.
+- ESLint now refuses `dangerouslySetInnerHTML` (`react/no-danger`).
+- The inquiry form has length limits, a linked hint and a calm message when the server cannot be reached.
+
+`docs/break-list.md` is the break list for this repository. Yours should look like it.
+
+Passing tests do not prove the app is safe. They prove the breaks you thought of stay fixed.

@@ -12,8 +12,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "bun run src/db/seed.ts",
     "auth:seed": "bun run src/scripts/create-demo-agent.ts",
+    "test": "bun run src/scripts/test-validation.ts",
     "scan:secrets": "bun run src/scripts/scan-secrets.ts",
-    "check": "bun run typecheck && bun run lint && bun run scan:secrets && bun run build"
+    "check": "bun run typecheck && bun run lint && bun run scan:secrets && bun run test && bun run build"
   },
   "dependencies": {
     "better-auth": "1.7.25",

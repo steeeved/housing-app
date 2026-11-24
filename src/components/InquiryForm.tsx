@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from "react";
 
 import type { Listing } from "@/data/listings";
+import { LIMITS } from "@/lib/validate-inquiry";
 
 const fieldClass = "mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900";
 const buttonClass = "rounded-lg bg-violet-700 px-4 py-2 font-bold text-white hover:bg-violet-800 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-violet-700";
@@ -28,10 +29,11 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
           message: form.get("message"),
         }),
       });
-      const result = (await response.json()) as { message?: unknown };
-      const message = typeof result.message === "string"
-        ? result.message
-        : "The server returned an unexpected response.";
+      const result: unknown = await response.json().catch(() => null);
+      const message =
+        result && typeof result === "object" && "message" in result && typeof result.message === "string"
+          ? result.message
+          : "The server sent an answer we could not read. Try again.";
 
       setResponseMessage(message);
       setStatus(response.ok ? "received" : "error");
@@ -57,8 +59,8 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
   return (
     <section className="mt-10 rounded-xl bg-white p-6 ring-1 ring-zinc-200" aria-labelledby="inquiry-heading">
       <h2 id="inquiry-heading" className="text-2xl font-bold text-zinc-900">Save a fictional inquiry</h2>
-      <p className="mt-2 text-zinc-700">
-        Use an invented name and message. Do not include a real phone number, email address or home address.
+      <p id="inquiry-help" className="mt-2 text-zinc-700">
+        Use an invented name and message. Do not include a real phone number, email address or home address. The server rejects real-looking contact details.
       </p>
 
       <form className="mt-6 grid gap-4" onSubmit={submitInquiry}>
@@ -74,7 +76,7 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
 
         <div>
           <label className="font-bold text-zinc-800" htmlFor="display-name">Invented name</label>
-          <input className={fieldClass} id="display-name" name="displayName" placeholder="For example, Amani" minLength={2} maxLength={80} required />
+          <input className={fieldClass} id="display-name" name="displayName" placeholder="For example, Amani" minLength={2} maxLength={LIMITS.name} aria-describedby="inquiry-help" required />
         </div>
 
         <div>
@@ -85,7 +87,8 @@ export function InquiryForm({ listings }: { listings: Listing[] }) {
             name="message"
             rows={4}
             minLength={10}
-            maxLength={500}
+            maxLength={LIMITS.message}
+            aria-describedby="inquiry-help"
             placeholder="I would like to know when this fictional home is available."
             required
           />

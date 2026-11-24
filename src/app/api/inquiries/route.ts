@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { saveInquiry } from "@/db/queries";
-
-type InquiryInput = {
-  listingId?: unknown;
-  displayName?: unknown;
-  message?: unknown;
-};
+import { validateInquiry, type InquiryInput } from "@/lib/validate-inquiry";
 
 export async function POST(request: Request) {
   let input: InquiryInput;
@@ -17,46 +12,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Send valid JSON." }, { status: 400 });
   }
 
-  if (typeof input.displayName !== "string" || input.displayName.trim().length < 2) {
-    return NextResponse.json(
-      { message: "Use an invented name with at least 2 characters." },
-      { status: 400 },
-    );
+  const result = validateInquiry(input ?? {});
+
+  if (!result.ok) {
+    return NextResponse.json({ message: result.message }, { status: 400 });
   }
 
-  if (input.displayName.trim().length > 80) {
+  let saved: Awaited<ReturnType<typeof saveInquiry>>;
+
+  try {
+    saved = await saveInquiry(result.value);
+  } catch {
+    // Log a plain sentence. Never log the error object, which could carry connection details.
+    console.error("Saving an inquiry failed.");
     return NextResponse.json(
-      { message: "Keep the invented name to 80 characters or fewer." },
-      { status: 400 },
+      { message: "The practice database is not available. Try again in a moment." },
+      { status: 503 },
     );
   }
-
-  if (typeof input.message !== "string" || input.message.trim().length < 10) {
-    return NextResponse.json(
-      { message: "Write an invented message with at least 10 characters." },
-      { status: 400 },
-    );
-  }
-
-  if (input.message.trim().length > 500) {
-    return NextResponse.json(
-      { message: "Keep the invented message to 500 characters or fewer." },
-      { status: 400 },
-    );
-  }
-
-  if (typeof input.listingId !== "string") {
-    return NextResponse.json(
-      { message: "Choose an available sample home." },
-      { status: 400 },
-    );
-  }
-
-  const saved = await saveInquiry({
-    listingId: input.listingId,
-    displayName: input.displayName.trim(),
-    message: input.message.trim(),
-  });
 
   if (!saved) {
     return NextResponse.json(
