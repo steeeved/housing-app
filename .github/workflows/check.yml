@@ -1,0 +1,44 @@
+# Runs the same checks you run on your laptop with: bun run check
+# This workflow uses no secrets. It never needs your database address or your auth secret.
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# The robot may read the code. It may not change anything.
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Install the pinned packages
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Secret scan
+        run: bun run scan:secrets
+
+      - name: Build
+        run: bun run build
+        env:
+          # Placeholders so the build can start. They are not secrets and they connect to nothing.
+          DATABASE_URL: postgresql://localhost:5432/ci-build-only
+          BETTER_AUTH_SECRET: placeholder-build-only-not-a-real-secret

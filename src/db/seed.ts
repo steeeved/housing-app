@@ -5,7 +5,10 @@ const database = getDatabase();
 
 await database
   .insert(agencies)
-  .values({ id: "nyumba-agency", name: "Nyumba Agency", county: "Murang'a" })
+  .values([
+    { id: "nyumba-agency", name: "Nyumba Agency", county: "Murang'a" },
+    { id: "ziwa-property", name: "Ziwa Property", county: "Kisumu" },
+  ])
   .onConflictDoNothing();
 
 await database
@@ -17,8 +20,10 @@ await database
     { id: "makuyu-single-room", agencyId: "nyumba-agency", title: "Single room", area: "Makuyu", county: "Murang'a", rentKes: 3000, bedrooms: 0, status: "let" },
     { id: "kamakwa-three-bed", agencyId: "nyumba-agency", title: "Three bedrooms", area: "Kamakwa", county: "Nyeri", rentKes: 25000, bedrooms: 3, status: "available" },
     { id: "nyali-one-bed", agencyId: "nyumba-agency", title: "One bedroom", area: "Nyali", county: "Mombasa", rentKes: 22000, bedrooms: 1, status: "let" },
+    { id: "ziwa-milimani-flat", agencyId: "ziwa-property", title: "Ziwa Milimani flat", area: "Milimani", county: "Kisumu", rentKes: 16000, bedrooms: 2, status: "available" },
+    { id: "ziwa-kondele-bedsitter", agencyId: "ziwa-property", title: "Ziwa Kondele bedsitter", area: "Kondele", county: "Kisumu", rentKes: 6500, bedrooms: 0, status: "available" },
   ])
   .onConflictDoNothing();
 
-console.log("Seeded six fictional listings.");
+console.log("Seeded eight fictional listings across two agencies.");
 await closeDatabase();
