@@ -1,52 +1,69 @@
 # Nyumba
 
-Nyumba is a fictional housing listings site for a letting agency in Kenya. Students build it chapter by chapter while learning how to direct and verify an AI coding agent.
+Nyumba is a fictional housing listings site for a letting agency in Kenya. Visitors browse homes and send an inquiry. Fictional agents sign in to see their own agency's homes, and a manager can mark a home as let. Students build it chapter by chapter while learning how to direct and verify an AI coding agent.
 
-Every agency, home, area combination, rent and inquiry in this repository is invented. Fictional data only.
+**Live site:** add your own address here after launch.
+**Made by:** add your first name or a nickname here. Do not add your full name or school.
 
-Chapter 8 uses Drizzle ORM to read listings from PostgreSQL and save validated fictional inquiries. Chapter 9 adds Better Auth. Chapter 10 adds role-based authorization and agency isolation: Amani Manager can update only Nyumba Agency listings, while Baraka Agent sees only Ziwa Property listings and has read-only access. Public sign-up stays disabled.
+Every agency, home, area, rent and inquiry in this repository is invented. Fictional data only.
 
-## Run the app
+## What it does
 
-Install the pinned dependencies and start the development server:
+- Browse homes read from a PostgreSQL database and filter them by county, maximum rent and bedrooms.
+- Send an inquiry about an available home. The server validates it and saves it. The form accepts invented details only.
+- Sign in as a fictional user. Public sign-up is turned off.
+- Each agency sees only its own homes. A manager can mark an owned home as let or available. An agent cannot.
+- Missing pages and failures show a plain message with no technical detail.
+
+## What it does not do
+
+- It does not take payments, send real messages to an agency or show maps.
+- It has not been tested by real tenants or with real agencies.
+- It has not been tested with a screen reader.
+
+## Built with
+
+Next.js and TypeScript, PostgreSQL with Drizzle ORM, Better Auth, Tailwind CSS, Vercel for hosting, GitHub Actions for checks, and an AI coding agent for drafts.
+
+## How it is checked
+
+```bash
+bun run check
+```
+
+`check` runs, in order: `typecheck`, `lint`, `scan:secrets`, `test` and `build`. The same checks run on every pull request.
+
+After a launch, point the launch check at the live address:
+
+```bash
+bun run launch:check https://your-address-here
+```
+
+It checks the address from outside. It does not check phones, sign-in or who can see what. Those are checked by hand. See `docs/launch-checklist.md`.
+
+## Run it on your own computer
+
+Copy `.env.example` to `.env.local` and ask the teacher for the scoped PostgreSQL address, a random auth secret and two fictional class-only credentials. Never commit that file or paste its values into a prompt, screenshot or chat.
 
 ```bash
 bun install --frozen-lockfile
-bun run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-Copy `.env.example` to `.env.local`. Ask the teacher for a scoped URL to your isolated learner database and the generated auth secret, then use only the fictional class credentials. Never paste their values into a prompt, screenshot, commit or class chat.
-
-The teacher prepares each isolated learner database and its two fictional users:
-
-```bash
 bun --env-file=.env.local run db:migrate
 bun --env-file=.env.local run db:seed
 bun --env-file=.env.local run auth:seed
+bun run dev
 ```
 
-Learners do not run migrations against one shared writable schema.
-
-Open `/dashboard` after signing in. Test four server-side boundaries: signed-out access redirects; Amani can update a Nyumba Agency listing; Amani cannot update a Ziwa listing; and Baraka cannot update even a Ziwa listing because the agent role is read-only.
-
-Before pushing a change, run:
-
-```bash
-bun run lint
-bun run build
-```
+Open [http://localhost:3000](http://localhost:3000). The teacher runs migrations and seeds once for each isolated learner database.
 
 ## Chapter workflow
 
 1. Pull the latest approved chapter branch.
 2. Create a branch for one small change.
-3. Read the diff and run the checks.
+3. Read the diff and run `bun run check`.
 4. Push the branch and open a pull request.
 5. Explain what changed before asking for review.
 
-The chapter PRs are cumulative, but every PR targets `main`. Merge them in chapter order; each later diff shrinks automatically after its prerequisite lands.
+The chapter PRs are cumulative and every PR targets `main`. Merge them in chapter order; each later diff shrinks automatically after its prerequisite lands.
 
 ## Safety rules
 
@@ -56,38 +73,15 @@ The chapter PRs are cumulative, but every PR targets `main`. Merge them in chapt
 - Do not make the repository public or share a deployment link beyond the agreed class audience.
 - Read every AI-agent permission request and every diff before committing.
 
-## Deployment
+## How I worked with AI
 
-The connected Vercel project builds the repository after a push. An adult holds the Vercel account. If a deployment fails, read the first build error and compare it with the local `bun run build` result before changing code.
+Write this part yourself, in your own words. Say what the AI drafted, what you checked and one thing it got wrong.
 
-## Chapter 11: check before you merge
+## More
 
-Chapter 11 adds one command that runs every automated check, and a GitHub workflow that runs the same checks on each pull request.
-
-```bash
-bun run check
-```
-
-It runs, in order: `typecheck`, `lint`, `scan:secrets`, `test` and `build`. The workflow in `.github/workflows/check.yml` uses no secrets. Its build step uses obvious placeholder values that connect to nothing.
-
-Green checks are necessary, not sufficient. They do not test sign-in, roles or agency isolation. Re-run the Chapter 10 access matrix whenever you touch those, and write the result in the pull request.
-
-`docs/environments.md` lists which setting belongs in which place. It holds names only.
-
-## Chapter 12: break it, fix it
-
-Chapter 12 is the learner trying to break their own app, then fixing what breaks. Three kinds of break matter most here: hostile text, bad requests, and pages that fail.
-
-`bun run check` now also runs `test`, which executes `src/scripts/test-validation.ts`: a table of inputs the inquiry validator must accept or reject. The workflow runs the same step.
-
-What changed:
-
-- `src/lib/validate-inquiry.ts` checks length, plain text, and real-looking contact details before anything is stored. It never repeats the rejected text back.
-- `src/app/api/inquiries/route.ts` answers bad JSON with 400 and a database failure with 503 and a plain sentence.
-- `src/app/not-found.tsx` and `src/app/error.tsx` give friendly pages with no technical detail.
-- ESLint now refuses `dangerouslySetInnerHTML` (`react/no-danger`).
-- The inquiry form has length limits, a linked hint and a calm message when the server cannot be reached.
-
-`docs/break-list.md` is the break list for this repository. Yours should look like it.
-
-Passing tests do not prove the app is safe. They prove the breaks you thought of stay fixed.
+- `docs/stories.md` and `docs/data.md`: the plan.
+- `docs/environments.md`: which setting lives where. Names only.
+- `docs/break-list.md`: what I tried to break.
+- `docs/launch-checklist.md`: what I checked before launch.
+- `docs/demo-script.md` and `docs/retro.md`: my Demo Day script and what I learned.
+- `docs/build-log.md`: what each chapter added.

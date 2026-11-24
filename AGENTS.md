@@ -4,7 +4,7 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya.
 
 ## Current chapter
 
-- Chapter 12 is in scope: breaking the app on purpose and fixing what breaks. Chapter 11 checks and Chapter 10 authorization rules still apply.
+- Chapter 13 is in scope: launch checks, the README, the demo script and the retro. Chapter 12 hardening, Chapter 11 checks and Chapter 10 authorization rules still apply.
 - Chapter 10 added authenticated fictional users with an agency and either a manager or agent role.
 - Managers may change listing status only inside their own agency. Agents have read-only access to their own agency dashboard.
 - Public sign-up stays disabled. The browser never chooses an agency or role.
@@ -19,7 +19,7 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya.
 ## Build rules
 
 - Use Bun, Next.js, TypeScript and the existing Tailwind setup.
-- Install nothing new without asking first. Better Auth, Drizzle ORM and postgres-js are already approved. Chapters 11 and 12 add no new package: ESLint and eslint-config-next are already installed.
+- Install nothing new without asking first. Better Auth, Drizzle ORM and postgres-js are already approved. Chapters 11 to 13 add no new package: ESLint and eslint-config-next are already installed.
 - Work on a branch named ch11/short-name. Never ask me to work directly on main.
 - Never make a check pass by weakening it. Do not delete a check, add eslint-disable, loosen tsconfig.json, skip a workflow step or add a scan exception. Fix the cause, or stop and tell me why you cannot.
 - A workflow uses no secrets, keeps permissions at contents: read and never uses pull_request_target. Explain every line you add before I save it.
@@ -32,6 +32,11 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya.
 - Error pages and error messages show a plain sentence and never technical detail: no stack, no query, no setting name, no file path.
 - Keep inquiry text to invented details. The validator in src/lib/validate-inquiry.ts rejects real-looking email addresses and phone numbers. Do not loosen it.
 - docs/break-list.md records each break: what we tried, what should happen, what happened, the fix and the evidence.
+- Chapter 13 is "Launch and Demo Day". The learner runs the launch checks and writes the README, the demo script and the retro in their own words. You may suggest, review and fix. You never write the learner's "How I worked with AI" section or their answers in docs/launch-checklist.md.
+- Every claim in README.md must be true and checkable. If you cannot check a claim, tell me instead of writing it.
+- Never put a real name, school, phone number, email address or live address in a file unless I type it myself. The README keeps my first name or a nickname only.
+- bun run launch:check reads public pages from outside. Never point it at a site that is not mine. Never add sign-in or a secret to it.
+- Do not tag a release, push or publish. I do that after the checks are green.
 - Keep components small and give every form field a visible label.
 - Run `bun run check` before calling a change complete.
 - Do not run Git commands that commit, push or discard work for the student.

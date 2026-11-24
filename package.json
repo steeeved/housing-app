@@ -1,6 +1,6 @@
 {
   "name": "housing-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,6 +13,7 @@
     "db:seed": "bun run src/db/seed.ts",
     "auth:seed": "bun run src/scripts/create-demo-agent.ts",
     "test": "bun run src/scripts/test-validation.ts",
+    "launch:check": "bun run src/scripts/launch-check.ts",
     "scan:secrets": "bun run src/scripts/scan-secrets.ts",
     "check": "bun run typecheck && bun run lint && bun run scan:secrets && bun run test && bun run build"
   },
