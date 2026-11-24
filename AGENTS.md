@@ -4,7 +4,8 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya.
 
 ## Current chapter
 
-- Chapter 10 is in scope: authenticated fictional users receive an agency and either a manager or agent role.
+- Chapter 11 is in scope: checks, a pull request workflow and environment notes. Chapter 10 authorization rules still apply.
+- Chapter 10 added authenticated fictional users with an agency and either a manager or agent role.
 - Managers may change listing status only inside their own agency. Agents have read-only access to their own agency dashboard.
 - Public sign-up stays disabled. The browser never chooses an agency or role.
 - The teacher runs migrations and seeds once for each isolated learner database. Learners do not share one writable schema.
@@ -18,7 +19,12 @@ Nyumba is a fictional housing listings site for a letting agency in Kenya.
 ## Build rules
 
 - Use Bun, Next.js, TypeScript and the existing Tailwind setup.
-- Install nothing new without asking first. Better Auth, Drizzle ORM and postgres-js are already approved for the current chapter.
+- Install nothing new without asking first. Better Auth, Drizzle ORM and postgres-js are already approved. Chapter 11 adds no new package: ESLint and eslint-config-next are already installed.
+- Work on a branch named ch11/short-name. Never ask me to work directly on main.
+- Never make a check pass by weakening it. Do not delete a check, add eslint-disable, loosen tsconfig.json, skip a workflow step or add a scan exception. Fix the cause, or stop and tell me why you cannot.
+- A workflow uses no secrets, keeps permissions at contents: read and never uses pull_request_target. Explain every line you add before I save it.
+- Green checks do not prove the Chapter 10 rules still hold. If you change sign-in, roles or a private query, tell me to re-run the access matrix.
+- docs/environments.md holds setting names only. Never write a value in it.
 - Keep components small and give every form field a visible label.
 - Run `bun run lint` and `bun run build` before calling a change complete.
 - Do not run Git commands that commit, push or discard work for the student.

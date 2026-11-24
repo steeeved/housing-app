@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "lint": "eslint .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "bun run src/db/seed.ts",
-    "auth:seed": "bun run src/scripts/create-demo-agent.ts"
+    "auth:seed": "bun run src/scripts/create-demo-agent.ts",
+    "scan:secrets": "bun run src/scripts/scan-secrets.ts",
+    "check": "bun run typecheck && bun run lint && bun run scan:secrets && bun run build"
   },
   "dependencies": {
     "better-auth": "1.7.25",

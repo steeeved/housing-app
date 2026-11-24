@@ -59,3 +59,17 @@ The chapter PRs are cumulative, but every PR targets `main`. Merge them in chapt
 ## Deployment
 
 The connected Vercel project builds the repository after a push. An adult holds the Vercel account. If a deployment fails, read the first build error and compare it with the local `bun run build` result before changing code.
+
+## Chapter 11: check before you merge
+
+Chapter 11 adds one command that runs every automated check, and a GitHub workflow that runs the same checks on each pull request.
+
+```bash
+bun run check
+```
+
+It runs, in order: `typecheck`, `lint`, `scan:secrets` and `build`. The workflow in `.github/workflows/check.yml` uses no secrets. Its build step uses obvious placeholder values that connect to nothing.
+
+Green checks are necessary, not sufficient. They do not test sign-in, roles or agency isolation. Re-run the Chapter 10 access matrix whenever you touch those, and write the result in the pull request.
+
+`docs/environments.md` lists which setting belongs in which place. It holds names only.
